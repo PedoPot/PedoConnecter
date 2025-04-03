@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from Entity.DirectMessage import DirectMessage as DirectMessageModel
+from src.Entity.DirectMessage import DirectMessage as DirectMessageModel
 
 app = FastAPI()
 

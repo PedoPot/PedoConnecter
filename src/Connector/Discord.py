@@ -1,6 +1,6 @@
 import tweepy
 
-class X:
+class Discord:
     
     def __init__(self, apiKey, apiSecret, accessToken, accessSecret):
         
@@ -23,8 +23,8 @@ class X:
         
         try:
             self.api.verify_credentials()
-            print("Log to X successful")
+            print("Log to Discord successful")
         except tweepy.TweepError as e:
-            print(f"Log to X fail : {e}")
+            print(f"Log to Discord fail : {e}")
             return False
 
