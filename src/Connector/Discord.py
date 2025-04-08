@@ -1,30 +1,55 @@
-import tweepy
+import discord
+from discord.ext import commands
+from src.Connector.Connector import Connector
+import asyncio
 
-class Discord:
-    
-    def __init__(self, apiKey, apiSecret, accessToken, accessSecret):
-        
-        self.apiKey = apiKey
-        self.apiSecret = apiSecret
-        self.accessToken = accessToken
-        self.accessSecret = accessSecret
-        self.api = None
-    
-    def setApi(self, api):
-        
-        self.api = api
-        return self.api
-        
-    def connect(self):
-        
-        auth = tweepy.OAuthHandler(self.apiKey, self.apiSecret)
-        auth.set_access_token(self.accessToken, self.accessSecret)
-        self.api = self.setApi(tweepy.API(auth))
-        
+class Discord(Connector):
+    def __init__(self, token):
+        self.token = token
+        self.intents = discord.Intents.default()
+        self.intents.messages = True
+        self.intents.dm_messages = True
+        self.intents.guilds = True
+        self.intents.message_content = True
+
+        self.bot = commands.Bot(command_prefix="!", intents=self.intents)
+
+        # Events
+        self.bot.event(self.on_ready)
+        self.bot.event(self.on_message)
+
+        # Commands
+        self.bot.command()(self.send_direct_message)
+        self.bot.command()(self.send_server_message)
+
+    async def on_ready(self):
+        print(f"{self.bot.user} is connnected.")
+
+    async def on_message(self, message):
+        if isinstance(message.channel, discord.DMChannel) and message.author != self.bot.user:
+            self.send_message_to_pedo_controller(message.content)
+#            await message.channel.send("I received your message !")
+
+    async def send_direct_message(self, user_id: str, message: str):
         try:
-            self.api.verify_credentials()
-            print("Log to Discord successful")
-        except tweepy.TweepError as e:
-            print(f"Log to Discord fail : {e}")
-            return False
+            print(f"zertyuijhvhbjlk")
+            user = await self.bot.fetch_user(int(user_id))
+            await user.send(message)
+            print(f"Message sent to {user.name} ({user.id})")
+        except Exception as e:
+            print(f"Failed to send message to user {user_id}: {e}")
 
+    async def send_server_message(self, ctx, channel_id: int, *, contenu):
+        channel = self.bot.get_channel(channel_id)
+        if channel:
+            await channel.send(contenu)
+            await ctx.send("Message sent !")
+        else:
+            await ctx.send("Canal not found.")
+
+    def start(self):
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self.bot.start(self.token))
+        except RuntimeError:
+            asyncio.run(self.bot.start(self.token))

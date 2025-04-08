@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.13.2-slim-bookworm
 LABEL "Project"="PedoConnector"
 
 USER root
@@ -17,4 +17,4 @@ RUN pip3 list --format=columns
 USER 1001
 
 EXPOSE 9341
-CMD ["fastapi", "run", "/app/src/main.py", "--port", "9341", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9341"]
