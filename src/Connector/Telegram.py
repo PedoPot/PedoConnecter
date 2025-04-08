@@ -27,14 +27,10 @@ class Telegram(Connector):
             asyncio.run(run())
 
     async def handle_message(self, update: Update, context):
-        message = update.message.text
-        username = update.message.from_user.first_name
-        self.send_message_to_pedo_controller(message)
-        print(f"[DEBUG] Message from user: {username}, Content: {message}")
-
- #       response = f"Hello {user_name}, you said: {user_message}"
- #       print("[DEBUG] Relaying the message to the user...")
- #       await self.send_message(update.message.chat_id, response)
+        message_content = update.message.text
+        chat_id = update.message.chat_id
+        message_date = update.message.date.isoformat()
+        self.send_message_to_pedo_controller("telegram", chat_id, message_content, message_date)
 
     async def send_direct_message(self, user_id: int, message: str):
         await self.application.bot.send_message(chat_id=user_id, text=message)

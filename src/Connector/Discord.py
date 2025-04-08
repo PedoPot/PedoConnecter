@@ -27,12 +27,11 @@ class Discord(Connector):
 
     async def on_message(self, message):
         if isinstance(message.channel, discord.DMChannel) and message.author != self.bot.user:
-            self.send_message_to_pedo_controller(message.content)
-#            await message.channel.send("I received your message !")
+            user_id = str(message.author.id)
+            self.send_message_to_pedo_controller("discord", user_id, message.content, message.created_at.isoformat())
 
     async def send_direct_message(self, user_id: str, message: str):
         try:
-            print(f"zertyuijhvhbjlk")
             user = await self.bot.fetch_user(int(user_id))
             await user.send(message)
             print(f"Message sent to {user.name} ({user.id})")
