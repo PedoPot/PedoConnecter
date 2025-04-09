@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException
-from src.Entity.DirectMessage import DirectMessage as DirectMessageModel
-from src.connector import ask_connectors
+from app.Entity.DirectMessage import DirectMessage as DirectMessageModel
 from contextlib import asynccontextmanager
-from src.Entity.Authentication import Authentication
-from src.Connector.Connectors import Connectors
+from app.Entity.Authentication import Authentication
+from app.Connector.Connectors import Connectors, ask_connectors
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,7 +21,6 @@ async def send_direct_message(direct_message: DirectMessageModel):
     connector = connectors.get_connector(token)
     if connector:
         await connector.send_direct_message(user_id, message)
-
     
     return direct_message
 

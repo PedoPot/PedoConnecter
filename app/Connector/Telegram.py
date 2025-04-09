@@ -1,9 +1,9 @@
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters
-from src.Connector.Connector import Connector
+from app.Connector.AbstractConnector import AbstractConnector
 import asyncio
 
-class Telegram(Connector):
+class Telegram(AbstractConnector):
     
     def __init__(self, token: str):
         super().__init__()

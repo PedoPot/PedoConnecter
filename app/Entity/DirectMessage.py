@@ -1,4 +1,4 @@
-from src.Entity.Authentication import Authentication
+from app.Entity.Authentication import Authentication
 
 class DirectMessage(Authentication):
     user_id: str

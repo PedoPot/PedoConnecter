@@ -1,13 +1,13 @@
 import requests
 import abc
-import datetime
+import os
 
-class Connector:
+class AbstractConnector:
     def __init__(self):
         pass
 
     def send_message_to_pedo_controller(self, connector_name: str, user_id: str, message_content: str, message_date: str):
-        url = "https://webhook.site/14762a4c-aca9-4677-b3f9-43ebe9daae5c" #TODO: modify the URL 
+        url = os.getenv('PEDOCONTROLLER_API_URL') # Add route
         payload = {
             "connector_name": connector_name,
             "user_id": user_id,

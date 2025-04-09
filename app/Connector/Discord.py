@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-from src.Connector.Connector import Connector
+from app.Connector.AbstractConnector import AbstractConnector
 import asyncio
 
-class Discord(Connector):
+class Discord(AbstractConnector):
     def __init__(self, token):
         self.token = token
         self.intents = discord.Intents.default()
@@ -20,7 +20,6 @@ class Discord(Connector):
 
         # Commands
         self.bot.command()(self.send_direct_message)
-        self.bot.command()(self.send_server_message)
 
     async def on_ready(self):
         print(f"{self.bot.user} is connnected.")
@@ -37,14 +36,6 @@ class Discord(Connector):
             print(f"Message sent to {user.name} ({user.id})")
         except Exception as e:
             print(f"Failed to send message to user {user_id}: {e}")
-
-    async def send_server_message(self, ctx, channel_id: int, *, contenu):
-        channel = self.bot.get_channel(channel_id)
-        if channel:
-            await channel.send(contenu)
-            await ctx.send("Message sent !")
-        else:
-            await ctx.send("Canal not found.")
 
     def start(self):
         try:

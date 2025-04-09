@@ -1,6 +1,8 @@
 from typing import Dict, List, Optional, Any
-from src.Connector.Discord import Discord
-from src.Connector.Telegram import Telegram
+from app.Connector.Discord import Discord
+from app.Connector.Telegram import Telegram
+import requests
+import os
 
 class Connectors:
     def __init__(self):
@@ -14,12 +16,6 @@ class Connectors:
 
     def get_connector(self, connector_name: str) -> Optional[Any]:
         return self._active_connectors.get(connector_name.lower())
-
-    def get_all_connectors(self) -> Dict[str, Any]:
-        return self._active_connectors
-
-    def get_active_connector_names(self) -> List[str]:
-        return list(self._active_connectors.keys())
 
     async def start_discord(self, token: str) -> bool:
         discord = Discord(token)
@@ -41,3 +37,15 @@ class Connectors:
         elif connector_name.lower() == "telegram":
             return await self.start_telegram(token)
         return False
+    
+def ask_connectors():
+    url = os.getenv('PEDOCONTROLLER_API_URL')
+    payload = {}
+    headers = {"Content-Type": "application/json"}
+
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status()
+        print(f"Message successfully sent to the server: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to send message to the server: {e}")
