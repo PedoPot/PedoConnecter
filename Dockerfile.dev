@@ -12,7 +12,8 @@ RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir -r /code/requirements.txt
 RUN pip3 list --format=columns
 
-COPY ./app/ /code/app
+# NOT NEEDED BECAUSE WE USE VOLUME FOR THE DEV ENV
+# COPY ./app/ /code/app
 USER 1001
 
 EXPOSE 9341
